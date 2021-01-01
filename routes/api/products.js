@@ -6,7 +6,7 @@ const productsService = new ProductsService();
 
 router.get('/', async function (req, res, next) {
   const { tags } = req.query;
-
+  console.log('req', req.query);
   try {
     const products = await productsService.getProducts({ tags })
 
@@ -23,12 +23,13 @@ router.get('/', async function (req, res, next) {
 
 router.get('/:productId', async function (req, res, next) {
   const { productId } = req.params;
+  console.log('params', req.params);
 
   try {
     const product = await productsService.getProduct({ productId })
 
     res.status(200).json({
-      data: product[0],
+      data: product,
       message: 'product retrieved'
     })
   } catch (err) {
@@ -42,10 +43,10 @@ router.post('/', async function (req, res, next) {
   const { body: product } = req;
 
   try {
-    const createProduct = await productsService.createProduct({ product })
+    const createdProduct = await productsService.createProduct({ product })
 
     res.status(201).json({
-      data: createProduct[0],
+      data: createdProduct[0],
       message: 'product created'
     })
   } catch (err) {
@@ -59,10 +60,10 @@ router.put('/:productId', async function (req, res, next) {
   const { body: product } = req;
 
   try {
-    const updateProduct = await productsService.updateProduct({ productId, product })
+    const updatedProduct = await productsService.updateProduct({ productId, product })
 
     res.status(200).json({
-      data: updateProduct,
+      data: updatedProduct,
       message: 'product updated'
     })
   } catch (err) {
@@ -74,10 +75,10 @@ router.delete('/:productId', async function (req, res, next) {
   const { productId } = req.params;
 
   try {
-    const product = await productsService.deleteProduct({ productId })
+    const deletedProduct = await productsService.deleteProduct({ productId })
 
     res.status(200).json({
-      data: product,
+      data: deletedProduct,
       message: 'products deleted'
     })
   } catch (err) {
@@ -90,10 +91,10 @@ router.patch('/:productId', async function (req, res, next) {
   const { body: editAttr } = req.params;
 
   try {
-    const patchProduct = await productsService.updateProduct({ productId, editAttr })
+    const patchedProduct = await productsService.updateProduct({ productId, editAttr })
 
     res.status(200).json({
-      data: patchProduct,
+      data: patchedProduct,
       message: 'product patched'
     })
   } catch (err) {
