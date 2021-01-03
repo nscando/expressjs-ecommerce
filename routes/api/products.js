@@ -46,7 +46,7 @@ router.post('/', async function (req, res, next) {
     const createdProduct = await productsService.createProduct({ product })
 
     res.status(201).json({
-      data: createdProduct[0],
+      data: createdProduct,
       message: 'product created'
     })
   } catch (err) {
