@@ -2,13 +2,21 @@ const express = require('express');
 const router = express.Router();
 const ProductsService = require('../../services/products');
 
+const validation = require('../../utils/middlewares/validationHanlder')
+
+const {
+  productIdSchema,
+  productTagSchema,
+  updateProductSchema,
+  createProductSchema
+} = require('../../utils/schemas/products');
+
 const productsService = new ProductsService();
 
 router.get('/', async function (req, res, next) {
   const { tags } = req.query;
   console.log('req', req.query);
   try {
-
     const products = await productsService.getProducts({ tags })
 
     res.status(200).json({
@@ -40,37 +48,39 @@ router.get('/:productId', async function (req, res, next) {
 });
 
 
-router.post('/', async function (req, res, next) {
+router.post('/', validation(createProductSchema), async function (req, res, next) {
   const { body: product } = req;
-
   try {
-    const createdProduct = await productsService.createProduct({ product })
+    const createdProduct = await productsService.createProduct({ product });
 
     res.status(201).json({
       data: createdProduct,
       message: 'product created'
-    })
+    });
   } catch (err) {
     next(err)
   }
 });
 
 
-router.put('/:productId', async function (req, res, next) {
-  const { productId } = req.params;
-  const { body: product } = req;
+router.put(
+  '/:productId',
+  validation({ productId: productIdSchema }, 'params'), validation(updateProductSchema),
+  async function (req, res, next) {
+    const { productId } = req.params;
+    const { body: product } = req;
 
-  try {
-    const updatedProduct = await productsService.updateProduct({ productId, product })
+    try {
+      const updatedProduct = await productsService.updateProduct({ productId, product })
 
-    res.status(200).json({
-      data: updatedProduct,
-      message: 'product updated'
-    })
-  } catch (err) {
-    next(err)
-  }
-});
+      res.status(200).json({
+        data: updatedProduct,
+        message: 'product updated'
+      })
+    } catch (err) {
+      next(err)
+    }
+  });
 
 router.delete('/:productId', async function (req, res, next) {
   const { productId } = req.params;
