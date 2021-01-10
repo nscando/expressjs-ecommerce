@@ -10,7 +10,7 @@ passport.use(
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
   },
     async function (tokenPayload, cb) {
-      const mongoDB = new MongoLib;
+      const mongoDB = new MongoLib();
       try {
         const [user] = await mongoDB.getAll('users', {
           username: tokenPayload.sub

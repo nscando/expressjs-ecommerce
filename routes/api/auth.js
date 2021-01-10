@@ -23,9 +23,9 @@ api.post('/token', async function (req, res, next) {
 
         const payload = { sub: user.username, email: user.email };
         const token = jwt.sign(payload, config.authJwtSecret, {
-          expiresIn: '15'
+          expiresIn: '15m'
         })
-        return res.status(200).json({ acces_token: token });
+        return res.status(200).json({ access_token: token });
       })
     } catch (error) {
       next(error);
