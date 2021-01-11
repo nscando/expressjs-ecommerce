@@ -15,6 +15,9 @@ const {
 //JWT strategy
 require('../../utils/auth/strategies/jwt');
 
+const cacheResponse = require('../../utils/cacheResponse');
+const { FIVE_MIN_IN_SEC, SIXTY_MIN_IN_SEC } = require('../../utils/time');
+
 function productsApi(app) {
   const router = express.Router();
   app.use('/api/products', router);
@@ -22,6 +25,7 @@ function productsApi(app) {
   const productsService = new ProductsService();
 
   router.get('/', async function (req, res, next) {
+    cacheResponse(res, FIVE_MIN_IN_SEC);
     const { tags } = req.query;
     try {
       const products = await productsService.getProducts({ tags })
@@ -38,6 +42,7 @@ function productsApi(app) {
 
 
   router.get('/:productId', async function (req, res, next) {
+    cacheResponse(res, SIXTY_MIN_IN_SEC);
     const { productId } = req.params;
 
     try {
