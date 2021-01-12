@@ -20,7 +20,7 @@ const isRequestAjaxOrApi = require("./utils/isRequestAjaxOrApi");
 const app = express();
 
 //middlewares
-app.use(helmet());
+// app.use(helmet());
 app.use(express.json());
 
 //static files
